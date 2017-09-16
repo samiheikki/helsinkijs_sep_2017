@@ -5,14 +5,32 @@ template.innerHTML = `
       display: block;
     }
   </style>
-  <h1>Hello world!</h1>
+  <h1></h1>
 `;
 
 class HelloWorld extends HTMLElement {
+  static get observedAttributes() {
+    return ['text'];
+  }
+
   constructor() {
     super();
     this.attachShadow({mode: 'open'});
     this.shadowRoot.appendChild(template.content.cloneNode(true));
+  }
+
+  get text() {
+    return this.getAttribute('text');
+  }
+
+  set text(val) {
+    this.setAttribute('text', val);
+  }
+
+  attributeChangedCallback(attr, oldValue, newValue) {
+    if (attr === 'text') {
+      this.shadowRoot.querySelector('h1').innerText = newValue;
+    }
   }
 }
 
